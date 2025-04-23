@@ -8,31 +8,68 @@
 	"item": [
 		{
 			"name": "restaurante",
-			"item": []
+			"item": [
+				{
+					"name": "restaurante",
+					"request": {
+						"method": "GET",
+						"header": []
+					},
+					"response": []
+				}
+			]
 		},
 		{
 			"name": "empleado",
-			"item": []
+			"item": [
+				{
+					"name": "empleado",
+					"request": {
+						"method": "GET",
+						"header": []
+					},
+					"response": []
+				}
+			]
 		},
 		{
 			"name": "producto",
-			"item": []
+			"item": [
+				{
+					"name": "producto",
+					"request": {
+						"method": "GET",
+						"header": []
+					},
+					"response": []
+				}
+			]
 		},
 		{
 			"name": "pedido",
-			"item": []
+			"item": [
+				{
+					"name": "pedido",
+					"request": {
+						"method": "GET",
+						"header": []
+					},
+					"response": []
+				}
+			]
 		},
 		{
 			"name": "detalles de pedido",
-			"item": []
-		},
-		{
-			"name": "parcial2",
-			"request": {
-				"method": "GET",
-				"header": []
-			},
-			"response": []
+			"item": [
+				{
+					"name": "detalles pedido",
+					"request": {
+						"method": "GET",
+						"header": []
+					},
+					"response": []
+				}
+			]
 		}
 	]
 }
