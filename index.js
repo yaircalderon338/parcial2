@@ -1,161 +1,244 @@
 const express = require('express');
+const cors = require('cors');
 const app = express();
-const pool = require('./db');
+const pool = require('./db'); // Asegúrate de que db.js exporte correctamente el pool
+
 const PORT = 3000;
 
+app.use(cors());
 app.use(express.json());
 
-// ------------------ RESTAURANTE ------------------
-app.get('/api/restaurantes', async (req, res) => {
-  const result = await pool.query('SELECT * FROM Restaurante');
-  res.json(result.rows);
+// ================== RESTAURANTE ==================
+app.get('/restaurantes', async (req, res) => {
+  try {
+    const result = await pool.query('SELECT * FROM restaurante');
+    res.json(result.rows);
+  } catch (err) {
+    res.status(500).send(`Error: ${err.message}`);
+  }
 });
 
-app.post('/api/restaurantes', async (req, res) => {
+app.post('/restaurantes', async (req, res) => {
   const { nombre, ciudad, direccion, fecha_apertura } = req.body;
-  const result = await pool.query(
-    'INSERT INTO Restaurante (nombre, ciudad, direccion, fecha_apertura) VALUES ($1, $2, $3, $4) RETURNING *',
-    [nombre, ciudad, direccion, fecha_apertura]
-  );
-  res.json(result.rows[0]);
+  try {
+    const result = await pool.query(
+      'INSERT INTO restaurante (nombre, ciudad, direccion, fecha_apertura) VALUES ($1, $2, $3, $4) RETURNING *',
+      [nombre, ciudad, direccion, fecha_apertura]
+    );
+    res.status(201).json(result.rows[0]);
+  } catch (err) {
+    res.status(500).send(`Error: ${err.message}`);
+  }
 });
 
-app.put('/api/restaurantes/:id', async (req, res) => {
+app.put('/restaurantes/:id', async (req, res) => {
   const { id } = req.params;
   const { nombre, ciudad, direccion, fecha_apertura } = req.body;
-  const result = await pool.query(
-    'UPDATE Restaurante SET nombre=$1, ciudad=$2, direccion=$3, fecha_apertura=$4 WHERE id_rest=$5 RETURNING *',
-    [nombre, ciudad, direccion, fecha_apertura, id]
-  );
-  res.json(result.rows[0]);
+  try {
+    const result = await pool.query(
+      'UPDATE restaurante SET nombre = $1, ciudad = $2, direccion = $3, fecha_apertura = $4 WHERE id_rest = $5 RETURNING *',
+      [nombre, ciudad, direccion, fecha_apertura, id]
+    );
+    res.json(result.rows[0]);
+  } catch (err) {
+    res.status(500).send(`Error: ${err.message}`);
+  }
 });
 
-app.delete('/api/restaurantes/:id', async (req, res) => {
-  await pool.query('DELETE FROM Restaurante WHERE id_rest=$1', [req.params.id]);
-  res.sendStatus(204);
+app.delete('/restaurantes/:id', async (req, res) => {
+  try {
+    await pool.query('DELETE FROM restaurante WHERE id_rest = $1', [req.params.id]);
+    res.sendStatus(204);
+  } catch (err) {
+    res.status(500).send(`Error: ${err.message}`);
+  }
 });
 
-// ------------------ EMPLEADO ------------------
-app.get('/api/empleados', async (req, res) => {
-  const result = await pool.query('SELECT * FROM Empleado');
-  res.json(result.rows);
+// ================== EMPLEADOS ==================
+app.get('/empleados/:id_rest', async (req, res) => {
+  try {
+    const result = await pool.query('SELECT * FROM empleado WHERE id_rest = $1', [req.params.id_rest]);
+    res.json(result.rows);
+  } catch (err) {
+    res.status(500).send(`Error: ${err.message}`);
+  }
 });
 
-app.post('/api/empleados', async (req, res) => {
+app.post('/empleados', async (req, res) => {
   const { nombre, rol, id_rest } = req.body;
-  const result = await pool.query(
-    'INSERT INTO Empleado (nombre, rol, id_rest) VALUES ($1, $2, $3) RETURNING *',
-    [nombre, rol, id_rest]
-  );
-  res.json(result.rows[0]);
+  try {
+    const result = await pool.query(
+      'INSERT INTO empleado (nombre, rol, id_rest) VALUES ($1, $2, $3) RETURNING *',
+      [nombre, rol, id_rest]
+    );
+    res.status(201).json(result.rows[0]);
+  } catch (err) {
+    res.status(500).send(`Error: ${err.message}`);
+  }
 });
 
-app.put('/api/empleados/:id', async (req, res) => {
+app.put('/empleados/:id', async (req, res) => {
   const { id } = req.params;
   const { nombre, rol, id_rest } = req.body;
-  const result = await pool.query(
-    'UPDATE Empleado SET nombre=$1, rol=$2, id_rest=$3 WHERE id_empleado=$4 RETURNING *',
-    [nombre, rol, id_rest, id]
-  );
-  res.json(result.rows[0]);
+  try {
+    const result = await pool.query(
+      'UPDATE empleado SET nombre = $1, rol = $2, id_rest = $3 WHERE id_empleado = $4 RETURNING *',
+      [nombre, rol, id_rest, id]
+    );
+    res.json(result.rows[0]);
+  } catch (err) {
+    res.status(500).send(`Error: ${err.message}`);
+  }
 });
 
-app.delete('/api/empleados/:id', async (req, res) => {
-  await pool.query('DELETE FROM Empleado WHERE id_empleado=$1', [req.params.id]);
-  res.sendStatus(204);
+app.delete('/empleados/:id', async (req, res) => {
+  try {
+    await pool.query('DELETE FROM empleado WHERE id_empleado = $1', [req.params.id]);
+    res.sendStatus(204);
+  } catch (err) {
+    res.status(500).send(`Error: ${err.message}`);
+  }
 });
 
-// ------------------ PRODUCTO ------------------
-app.get('/api/productos', async (req, res) => {
-  const result = await pool.query('SELECT * FROM Producto');
-  res.json(result.rows);
+// ================== PRODUCTOS ==================
+app.get('/productos', async (req, res) => {
+  try {
+    const result = await pool.query('SELECT * FROM producto');
+    res.json(result.rows);
+  } catch (err) {
+    res.status(500).send(`Error: ${err.message}`);
+  }
 });
 
-app.post('/api/productos', async (req, res) => {
+app.post('/productos', async (req, res) => {
   const { nombre, precio } = req.body;
-  const result = await pool.query(
-    'INSERT INTO Producto (nombre, precio) VALUES ($1, $2) RETURNING *',
-    [nombre, precio]
-  );
-  res.json(result.rows[0]);
+  try {
+    const result = await pool.query(
+      'INSERT INTO producto (nombre, precio) VALUES ($1, $2) RETURNING *',
+      [nombre, precio]
+    );
+    res.status(201).json(result.rows[0]);
+  } catch (err) {
+    res.status(500).send(`Error: ${err.message}`);
+  }
 });
 
-app.put('/api/productos/:id', async (req, res) => {
+app.put('/productos/:id', async (req, res) => {
   const { id } = req.params;
   const { nombre, precio } = req.body;
-  const result = await pool.query(
-    'UPDATE Producto SET nombre=$1, precio=$2 WHERE id_prod=$3 RETURNING *',
-    [nombre, precio, id]
-  );
-  res.json(result.rows[0]);
+  try {
+    const result = await pool.query(
+      'UPDATE producto SET nombre = $1, precio = $2 WHERE id_prod = $3 RETURNING *',
+      [nombre, precio, id]
+    );
+    res.json(result.rows[0]);
+  } catch (err) {
+    res.status(500).send(`Error: ${err.message}`);
+  }
 });
 
-app.delete('/api/productos/:id', async (req, res) => {
-  await pool.query('DELETE FROM Producto WHERE id_prod=$1', [req.params.id]);
-  res.sendStatus(204);
+app.delete('/productos/:id', async (req, res) => {
+  try {
+    await pool.query('DELETE FROM producto WHERE id_prod = $1', [req.params.id]);
+    res.sendStatus(204);
+  } catch (err) {
+    res.status(500).send(`Error: ${err.message}`);
+  }
 });
 
-// ------------------ PEDIDO ------------------
-app.get('/api/pedidos', async (req, res) => {
-  const result = await pool.query('SELECT * FROM Pedido');
-  res.json(result.rows);
+// ================== PEDIDOS ==================
+app.get('/pedidos/:id_rest', async (req, res) => {
+  try {
+    const result = await pool.query('SELECT * FROM pedido WHERE id_rest = $1', [req.params.id_rest]);
+    res.json(result.rows);
+  } catch (err) {
+    res.status(500).send(`Error: ${err.message}`);
+  }
 });
 
-app.post('/api/pedidos', async (req, res) => {
+app.post('/pedidos', async (req, res) => {
   const { fecha, id_rest, total } = req.body;
-  const result = await pool.query(
-    'INSERT INTO Pedido (fecha, id_rest, total) VALUES ($1, $2, $3) RETURNING *',
-    [fecha, id_rest, total]
-  );
-  res.json(result.rows[0]);
+  try {
+    const result = await pool.query(
+      'INSERT INTO pedido (fecha, id_rest, total) VALUES ($1, $2, $3) RETURNING *',
+      [fecha, id_rest, total]
+    );
+    res.status(201).json(result.rows[0]);
+  } catch (err) {
+    res.status(500).send(`Error: ${err.message}`);
+  }
 });
 
-app.put('/api/pedidos/:id', async (req, res) => {
+app.put('/pedidos/:id', async (req, res) => {
   const { id } = req.params;
   const { fecha, id_rest, total } = req.body;
-  const result = await pool.query(
-    'UPDATE Pedido SET fecha=$1, id_rest=$2, total=$3 WHERE id_pedido=$4 RETURNING *',
-    [fecha, id_rest, total, id]
-  );
-  res.json(result.rows[0]);
+  try {
+    const result = await pool.query(
+      'UPDATE pedido SET fecha = $1, id_rest = $2, total = $3 WHERE id_pedido = $4 RETURNING *',
+      [fecha, id_rest, total, id]
+    );
+    res.json(result.rows[0]);
+  } catch (err) {
+    res.status(500).send(`Error: ${err.message}`);
+  }
 });
 
-app.delete('/api/pedidos/:id', async (req, res) => {
-  await pool.query('DELETE FROM Pedido WHERE id_pedido=$1', [req.params.id]);
-  res.sendStatus(204);
+app.delete('/pedidos/:id', async (req, res) => {
+  try {
+    await pool.query('DELETE FROM pedido WHERE id_pedido = $1', [req.params.id]);
+    res.sendStatus(204);
+  } catch (err) {
+    res.status(500).send(`Error: ${err.message}`);
+  }
 });
 
-// ------------------ DETALLE PEDIDO ------------------
-app.get('/api/detalles', async (req, res) => {
-  const result = await pool.query('SELECT * FROM DetallePedido');
-  res.json(result.rows);
+// ================== DETALLE PEDIDO ==================
+app.get('/detallepedido/:id_pedido', async (req, res) => {
+  try {
+    const result = await pool.query('SELECT * FROM detallepedido WHERE id_pedido = $1', [req.params.id_pedido]);
+    res.json(result.rows);
+  } catch (err) {
+    res.status(500).send(`Error: ${err.message}`);
+  }
 });
 
-app.post('/api/detalles', async (req, res) => {
+app.post('/detallepedido', async (req, res) => {
   const { id_pedido, id_prod, cantidad, subtotal } = req.body;
-  const result = await pool.query(
-    'INSERT INTO DetallePedido (id_pedido, id_prod, cantidad, subtotal) VALUES ($1, $2, $3, $4) RETURNING *',
-    [id_pedido, id_prod, cantidad, subtotal]
-  );
-  res.json(result.rows[0]);
+  try {
+    const result = await pool.query(
+      'INSERT INTO detallepedido (id_pedido, id_prod, cantidad, subtotal) VALUES ($1, $2, $3, $4) RETURNING *',
+      [id_pedido, id_prod, cantidad, subtotal]
+    );
+    res.status(201).json(result.rows[0]);
+  } catch (err) {
+    res.status(500).send(`Error: ${err.message}`);
+  }
 });
 
-app.put('/api/detalles/:id', async (req, res) => {
+app.put('/detallepedido/:id', async (req, res) => {
   const { id } = req.params;
   const { id_pedido, id_prod, cantidad, subtotal } = req.body;
-  const result = await pool.query(
-    'UPDATE DetallePedido SET id_pedido=$1, id_prod=$2, cantidad=$3, subtotal=$4 WHERE id_detalle=$5 RETURNING *',
-    [id_pedido, id_prod, cantidad, subtotal, id]
-  );
-  res.json(result.rows[0]);
+  try {
+    const result = await pool.query(
+      'UPDATE detallepedido SET id_pedido = $1, id_prod = $2, cantidad = $3, subtotal = $4 WHERE id_detalle = $5 RETURNING *',
+      [id_pedido, id_prod, cantidad, subtotal, id]
+    );
+    res.json(result.rows[0]);
+  } catch (err) {
+    res.status(500).send(`Error: ${err.message}`);
+  }
 });
 
-app.delete('/api/detalles/:id', async (req, res) => {
-  await pool.query('DELETE FROM DetallePedido WHERE id_detalle=$1', [req.params.id]);
-  res.sendStatus(204);
+app.delete('/detallepedido/:id', async (req, res) => {
+  try {
+    await pool.query('DELETE FROM detallepedido WHERE id_detalle = $1', [req.params.id]);
+    res.sendStatus(204);
+  } catch (err) {
+    res.status(500).send(`Error: ${err.message}`);
+  }
 });
 
-// ------------------ INICIAR SERVIDOR ------------------
+// ================== INICIAR SERVIDOR ==================
 app.listen(PORT, () => {
   console.log(`Servidor corriendo en http://localhost:${PORT}`);
 });
