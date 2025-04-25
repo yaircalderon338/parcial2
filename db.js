@@ -8,8 +8,10 @@ const pool = new Pool({
   port: 5432,
 });
 
-pool.connect()
+// Verificamos conexión con una consulta simple
+pool.query('SELECT NOW()')
   .then(() => console.log('Conexión exitosa a la base de datos'))
-  .catch(err => console.error('Error al conectar con la base de datos:', err));
+  .catch(err => console.error(' Error al conectar con la base de datos:', err));
 
 module.exports = pool;
+
