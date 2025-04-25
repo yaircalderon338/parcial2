@@ -16,6 +16,30 @@
 						"header": []
 					},
 					"response": []
+				},
+				{
+					"name": "restaurante",
+					"request": {
+						"method": "POST",
+						"header": []
+					},
+					"response": []
+				},
+				{
+					"name": "restaurante",
+					"request": {
+						"method": "PUT",
+						"header": []
+					},
+					"response": []
+				},
+				{
+					"name": "restaurante",
+					"request": {
+						"method": "DELETE",
+						"header": []
+					},
+					"response": []
 				}
 			]
 		},
@@ -29,6 +53,30 @@
 						"header": []
 					},
 					"response": []
+				},
+				{
+					"name": "empleado",
+					"request": {
+						"method": "POST",
+						"header": []
+					},
+					"response": []
+				},
+				{
+					"name": "empleado",
+					"request": {
+						"method": "PUT",
+						"header": []
+					},
+					"response": []
+				},
+				{
+					"name": "empleado",
+					"request": {
+						"method": "DELETE",
+						"header": []
+					},
+					"response": []
 				}
 			]
 		},
@@ -39,6 +87,33 @@
 					"name": "producto",
 					"request": {
 						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": ""
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "producto",
+					"request": {
+						"method": "POST",
+						"header": []
+					},
+					"response": []
+				},
+				{
+					"name": "producto",
+					"request": {
+						"method": "PUT",
+						"header": []
+					},
+					"response": []
+				},
+				{
+					"name": "producto",
+					"request": {
+						"method": "DELETE",
 						"header": []
 					},
 					"response": []
@@ -55,6 +130,30 @@
 						"header": []
 					},
 					"response": []
+				},
+				{
+					"name": "pedido",
+					"request": {
+						"method": "POST",
+						"header": []
+					},
+					"response": []
+				},
+				{
+					"name": "pedido",
+					"request": {
+						"method": "PUT",
+						"header": []
+					},
+					"response": []
+				},
+				{
+					"name": "pedido",
+					"request": {
+						"method": "DELETE",
+						"header": []
+					},
+					"response": []
 				}
 			]
 		},
@@ -65,6 +164,42 @@
 					"name": "detalles pedido",
 					"request": {
 						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:3000/detallepedido/1\n",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"detallepedido",
+								"1\n"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "detalles pedido",
+					"request": {
+						"method": "POST",
+						"header": []
+					},
+					"response": []
+				},
+				{
+					"name": "detalles pedido",
+					"request": {
+						"method": "PUT",
+						"header": []
+					},
+					"response": []
+				},
+				{
+					"name": "detalles pedido",
+					"request": {
+						"method": "DELETE",
 						"header": []
 					},
 					"response": []

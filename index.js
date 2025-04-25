@@ -1,12 +1,12 @@
 const express = require('express');
 const cors = require('cors');
 const app = express();
-const pool = require('./db'); // Asegúrate de que db.js exporte correctamente el pool
+const pool = require('./db'); // Asegúrate que ./db exporta pool correctamente
 
-const PORT = 3000;
+const PORT = process.env.PORT || 3000;
 
 app.use(cors());
-app.use(express.json());
+app.use(express.json({ limit: '10mb' }));
 
 // ================== RESTAURANTE ==================
 app.get('/restaurantes', async (req, res) => {
