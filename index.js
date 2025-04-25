@@ -55,6 +55,15 @@ app.delete('/restaurantes/:id', async (req, res) => {
 });
 
 // ================== EMPLEADOS ==================
+app.get('/empleados', async (req, res) => {
+  try {
+    const result = await pool.query('SELECT * FROM empleado');
+    res.json(result.rows);
+  } catch (err) {
+    res.status(500).send(`Error: ${err.message}`);
+  }
+});
+
 app.get('/empleados/:id_rest', async (req, res) => {
   try {
     const result = await pool.query('SELECT * FROM empleado WHERE id_rest = $1', [req.params.id_rest]);
@@ -147,6 +156,15 @@ app.delete('/productos/:id', async (req, res) => {
 });
 
 // ================== PEDIDOS ==================
+app.get('/pedidos', async (req, res) => {
+  try {
+    const result = await pool.query('SELECT * FROM pedido');
+    res.json(result.rows);
+  } catch (err) {
+    res.status(500).send(`Error: ${err.message}`);
+  }
+});
+
 app.get('/pedidos/:id_rest', async (req, res) => {
   try {
     const result = await pool.query('SELECT * FROM pedido WHERE id_rest = $1', [req.params.id_rest]);
@@ -193,6 +211,15 @@ app.delete('/pedidos/:id', async (req, res) => {
 });
 
 // ================== DETALLE PEDIDO ==================
+app.get('/detallepedido', async (req, res) => {
+  try {
+    const result = await pool.query('SELECT * FROM detallepedido');
+    res.json(result.rows);
+  } catch (err) {
+    res.status(500).send(`Error: ${err.message}`);
+  }
+});
+
 app.get('/detallepedido/:id_pedido', async (req, res) => {
   try {
     const result = await pool.query('SELECT * FROM detallepedido WHERE id_pedido = $1', [req.params.id_pedido]);
@@ -242,4 +269,3 @@ app.delete('/detallepedido/:id', async (req, res) => {
 app.listen(PORT, () => {
   console.log(`Servidor corriendo en http://localhost:${PORT}`);
 });
-
