@@ -211,29 +211,37 @@ app.delete('/pedidos/:id', async (req, res) => {
 });
 
 // ================== DETALLE PEDIDO ==================
-app.get('/detallepedido', async (req, res) => {
+
+// Obtener todos los detalles de pedidos
+app.get('/detallepedidos', async (req, res) => {
   try {
-    const result = await pool.query('SELECT * FROM detallepedido');
+    const result = await pool.query('SELECT * FROM detalle_pedido');
     res.json(result.rows);
   } catch (err) {
     res.status(500).send(`Error: ${err.message}`);
   }
 });
 
-app.get('/detallepedido/:id_pedido', async (req, res) => {
+// Obtener detalles de un pedido específico
+app.get('/detallepedidos/:id_pedido', async (req, res) => {
   try {
-    const result = await pool.query('SELECT * FROM detallepedido WHERE id_pedido = $1', [req.params.id_pedido]);
-    res.json(result.rows);
+    const result = await pool.query('SELECT * FROM detalle_pedido WHERE id_pedido = $1', [req.params.id_pedido]);
+    if (result.rows.length > 0) {
+      res.json(result.rows);
+    } else {
+      res.status(404).send('Detalles de pedido no encontrados');
+    }
   } catch (err) {
     res.status(500).send(`Error: ${err.message}`);
   }
 });
 
-app.post('/detallepedido', async (req, res) => {
+// Crear un nuevo detalle de pedido
+app.post('/detallepedidos', async (req, res) => {
   const { id_pedido, id_prod, cantidad, subtotal } = req.body;
   try {
     const result = await pool.query(
-      'INSERT INTO detallepedido (id_pedido, id_prod, cantidad, subtotal) VALUES ($1, $2, $3, $4) RETURNING *',
+      'INSERT INTO detalle_pedido (id_pedido, id_prod, cantidad, subtotal) VALUES ($1, $2, $3, $4) RETURNING *',
       [id_pedido, id_prod, cantidad, subtotal]
     );
     res.status(201).json(result.rows[0]);
@@ -242,28 +250,39 @@ app.post('/detallepedido', async (req, res) => {
   }
 });
 
-app.put('/detallepedido/:id', async (req, res) => {
+// Actualizar un detalle de pedido
+app.put('/detallepedidos/:id', async (req, res) => {
   const { id } = req.params;
   const { id_pedido, id_prod, cantidad, subtotal } = req.body;
   try {
     const result = await pool.query(
-      'UPDATE detallepedido SET id_pedido = $1, id_prod = $2, cantidad = $3, subtotal = $4 WHERE id_detalle = $5 RETURNING *',
+      'UPDATE detalle_pedido SET id_pedido = $1, id_prod = $2, cantidad = $3, subtotal = $4 WHERE id_detalle = $5 RETURNING *',
       [id_pedido, id_prod, cantidad, subtotal, id]
     );
-    res.json(result.rows[0]);
+    if (result.rows.length > 0) {
+      res.json(result.rows[0]);
+    } else {
+      res.status(404).send('Detalle de pedido no encontrado');
+    }
   } catch (err) {
     res.status(500).send(`Error: ${err.message}`);
   }
 });
 
-app.delete('/detallepedido/:id', async (req, res) => {
+// Eliminar un detalle de pedido
+app.delete('/detallepedidos/:id', async (req, res) => {
   try {
-    await pool.query('DELETE FROM detallepedido WHERE id_detalle = $1', [req.params.id]);
-    res.sendStatus(204);
+    const result = await pool.query('DELETE FROM detalle_pedido WHERE id_detalle = $1', [req.params.id]);
+    if (result.rowCount > 0) {
+      res.sendStatus(204); // No Content
+    } else {
+      res.status(404).send('Detalle de pedido no encontrado');
+    }
   } catch (err) {
     res.status(500).send(`Error: ${err.message}`);
   }
 });
+
 
 // ================== INICIAR SERVIDOR ==================
 app.listen(3000, () => {

@@ -63,7 +63,15 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": ""
+							"raw": "http://localhost:3000/empleados",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"empleados"
+							]
 						}
 					},
 					"response": []
@@ -103,7 +111,15 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": ""
+							"raw": "http://localhost:3000/productos",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"productos"
+							]
 						}
 					},
 					"response": []
@@ -180,15 +196,14 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:3000/detallepedido/1\n",
+							"raw": "http://localhost:3000/detallepedidos",
 							"protocol": "http",
 							"host": [
 								"localhost"
 							],
 							"port": "3000",
 							"path": [
-								"detallepedido",
-								"1\n"
+								"detallepedidos"
 							]
 						}
 					},
